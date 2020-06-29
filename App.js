@@ -8,15 +8,22 @@ import * as Animatable from 'react-native-animatable'
 const AnimateBtn = Animatable.createAnimatableComponent(TouchableOpacity)
 
 export default function App() {
-  const [task, setTask] = useState([
-    { key: 1, task: 'Comprar Pão' },
-    { key: 2, task: 'Estudar React Native' },
-    { key: 3, task: 'Fazer caminhada na Praça' },
-    { key: 4, task: 'Comprar Carne para fazer almoço' },
-    { key: 5, task: 'Descançar pois ninguém é de ferro' },
-  ])
-
+  const [task, setTask] = useState([])
   const [open, setOpen] = useState(false)
+  const [input, setInput] = useState('')
+
+  function handleAdd() {
+    if(input === '') return
+
+    const data = {
+      key: input,
+      task: input
+    }
+
+    setTask([...task, data])
+    setOpen(false)
+    setInput('')
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -44,19 +51,21 @@ export default function App() {
             <Text style={styles.modalTitle}> Nova Tarefa </Text>
           </View>
 
-          <View style={styles.modalBody}>
+          <Animatable.View style={styles.modalBody} animation="fadeInUp" useNativeDriver>
             <TextInput 
               multiline={true}
               placeholderTextColor="#747474"
               autoCorrect={false}
               placeholder="O que precisa fazer hoje?"
               style={styles.input}
+              value={input}
+              onChangeText={ (texto) => setInput(texto) }
             />
 
-            <TouchableOpacity style={styles.handleAdd}>
+            <TouchableOpacity style={styles.handleAdd} onPress={handleAdd}>
               <Text style={styles.handleAddText}>Cadastrar</Text>
             </TouchableOpacity>
-          </View>
+          </Animatable.View>
         
           </SafeAreaView>
       </Modal>
